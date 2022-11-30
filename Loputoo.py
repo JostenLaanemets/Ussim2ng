@@ -1,8 +1,14 @@
-import pygame as pg
+import pygame 
 import random
 
 
-Window= 1000
-screen = pg.display.set_mode([Window]*2)
-clock= pg.time.Clock()
+Ekraani_K6rgus= 720
+Ekraani_Laius= 480
 
+#
+pygame.init
+
+pygame.display.set_caption("V6imas Ussim2ng!")
+
+Ekraan = pygame.display.set_mode((Ekraani_K6rgus,Ekraani_Laius))
+fps=pygame.time.Clock()
