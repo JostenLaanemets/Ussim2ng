@@ -1,2 +1,2 @@
 # Ussim2ng
-Programmeerimise alused lõpitöö!
+Programmeerimise alused lõputöö!
