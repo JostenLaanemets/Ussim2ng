@@ -10,7 +10,11 @@ Ekraani_K6rgus= 720
 Ekraani_Laius= 480
 
 pygame.display.set_caption("V6imas Ussim2ng!")
-
+black = pygame.Color(0, 0, 0)
+white = pygame.Color(255, 255, 255)
+red = pygame.Color(255, 0, 0)
+green = pygame.Color(0, 255, 0)
+blue = pygame.Color(0, 0, 255)
 
 
 fps=pygame.time.Clock()
@@ -25,7 +29,12 @@ Ussi_keha = [  [100, 50],
 suund = 'PAREMALE'
 Viimane_suund = suund
 
+###################################################################
+#maius
 
+maiuse_asukoht = [random.randrange(1, (Ekraani_K6rgus//10))* 10,
+                random.randrange(1, (Ekraani_Laius)//10) * 10]
+maiuse_spawn = True
 
 
 ###################################################################
@@ -71,8 +80,25 @@ while True:
         Ussi_asukoht[0] -= 10
     if suund == 'PAREMALE':
         Ussi_asukoht[0] += 10
-        
-    #########################
+
+    #Ussikasvamine kui soob maiuse
+    Ussi_keha.insert(0,list(Ussi_keha))
+    if Ussi_asukoht[0] == maiuse_asukoht[0] and Ussi_asukoht[1] == maiuse_asukoht[1]:
+        maiuse_spawn = False
+    else:
+        Ussi_keha.pop()
+
+    if not maiuse_spawn:
+        maiuse_asukoht = [random.randrange(1, (Ekraani_K6rgus//10))* 10,
+                    random.randrange(1, (Ekraani_Laius)//10) * 10]
+    maiuse_spawn = True
+    Ekraan.fill(pygame.Color(0, 0, 0))
+
+    for pos in Ussi_keha:
+        pygame.draw.rect(Ekraan, red, pygame.Rect(pos[0], pos[1], 10, 10),1)
+
+    pygame.draw.rect(Ekraan, white, pygame.Rect(maiuse_asukoht[0], maiuse_asukoht[1], 10, 10))    
+    ######################################################
     Ekraan.fill(pygame.Color(0, 0, 0))
 
     #Ussi asukoha joonistamine
