@@ -1,7 +1,7 @@
 import pygame 
 import random
 
-pygame.init
+pygame.init()
 
 #################################################################
 Ussi_kiirus=15
@@ -10,6 +10,7 @@ Ekraani_K6rgus= 720
 Ekraani_Laius= 480
 
 pygame.display.set_caption("V6imas Ussim2ng!")
+
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
 red = pygame.Color(255, 0, 0)
@@ -19,7 +20,7 @@ blue = pygame.Color(0, 0, 255)
 
 fps=pygame.time.Clock()
 ##################################################################
-
+Ekraan = pygame.display.set_mode((Ekraani_K6rgus,Ekraani_Laius))
 Ussi_asukoht = [100, 50]
 
 Ussi_keha = [  [100, 50],
@@ -39,8 +40,6 @@ maiuse_spawn = True
 
 ###################################################################
 while True:
-    Ekraan = pygame.display.set_mode((Ekraani_K6rgus,Ekraani_Laius))
-
     for event in pygame.event.get():
         #Et saaks ekraani panna "x" kinni
         if event.type == pygame.QUIT:
@@ -81,7 +80,7 @@ while True:
     if suund == 'PAREMALE':
         Ussi_asukoht[0] += 10
 
-    #Ussikasvamine kui soob maiuse
+    #Ussi kasvamine kui soob maiuse
     Ussi_keha.insert(0,list(Ussi_keha))
     if Ussi_asukoht[0] == maiuse_asukoht[0] and Ussi_asukoht[1] == maiuse_asukoht[1]:
         maiuse_spawn = False
@@ -94,12 +93,14 @@ while True:
     maiuse_spawn = True
     Ekraan.fill(pygame.Color(0, 0, 0))
 
-    for pos in Ussi_keha:
-        pygame.draw.rect(Ekraan, red, pygame.Rect(pos[0], pos[1], 10, 10),1)
+    #for pos in Ussi_keha:
+        #pygame.draw.rect(Ekraan, pygame.Color(255, 0, 0), pygame.Rect(pos[0], pos[1], 10, 10))
 
-    pygame.draw.rect(Ekraan, white, pygame.Rect(maiuse_asukoht[0], maiuse_asukoht[1], 10, 10))    
+    #pygame.draw.rect(Ekraan, pygame.Color(255, 255, 255), pygame.Rect(maiuse_asukoht[0], maiuse_asukoht[1], 10, 10))    
+   
     ######################################################
-    Ekraan.fill(pygame.Color(0, 0, 0))
+
+    #Ekraan.fill(pygame.Color(0, 0, 0))
 
     #Ussi asukoha joonistamine
     Ussi_keha.insert(0, list(Ussi_asukoht))
