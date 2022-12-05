@@ -110,6 +110,16 @@ while True:
     #Et ussi saba tuleks temaga järgi
     Ussi_keha.pop()
 
+    #Kui uss läheb vastu seina, siis mäng lõppeb -------------------------------------------------
+    if Ussi_asukoht[1] > 720 or Ussi_asukoht[1] < 0 or Ussi_asukoht[0] > 480 or Ussi_asukoht[0] < 0:
+        pygame.quit()
+    
+    #Kui uss läheb iseenda vastu, siis mäng lõppeb -----------------------------------------------
+
+    for block in Ussi_keha[1:]:
+        if Ussi_asukoht[0] == block[0] and Ussi_asukoht[1] == block[1]:
+            pygame.quit()
+
 
 
 
