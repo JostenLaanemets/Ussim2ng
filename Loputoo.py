@@ -95,10 +95,11 @@ while True:
     pygame.draw.rect(Ekraan, pygame.Color(255, 255, 255), pygame.Rect(maiuse_asukoht[0], maiuse_asukoht[1], 10, 10))
   
 
-    #siin midagi broken 
+    
     #Kui uss läheb vastu seina, siis mäng lõppeb -------------------------------------------------
-    if Ussi_asukoht[0] < 0 or Ussi_asukoht[0] > Ekraani_K6rgus or Ussi_asukoht[1] < 0 or Ussi_asukoht[1] > Ekraani_Laius:
-        pygame.quit()
+    #if Ussi_asukoht[1] > 720 or Ussi_asukoht[1] < 0 or Ussi_asukoht[0] > 480 or Ussi_asukoht[0] < 0:
+    #    pygame.quit()
+
     #Kui uss läheb iseenda vastu, siis mäng lõppeb -----------------------------------------------
 
     for block in Ussi_keha[1:]:
