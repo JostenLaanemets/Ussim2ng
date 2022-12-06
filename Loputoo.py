@@ -4,24 +4,25 @@ import random
 pygame.init()
 
 #################################################################
-Ussi_kiirus=15
+
+Punktid=0
 
 Ekraani_K6rgus= 720
 Ekraani_Laius= 480
-
+Ekraan = pygame.display.set_mode((Ekraani_K6rgus,Ekraani_Laius))
 pygame.display.set_caption("V6imas Ussim2ng!")
-
 
 
 fps=pygame.time.Clock()
 ##################################################################
-Ekraan = pygame.display.set_mode((Ekraani_K6rgus,Ekraani_Laius))
+Ussi_kiirus=15
 Ussi_asukoht = [100, 50]
 
 Ussi_keha = [  [100, 50],
                 [90, 50],
                 [80, 50],
                 [70, 50]]
+###################################################################
 suund = 'PAREMALE'
 Viimane_suund = suund
 
@@ -31,6 +32,21 @@ Viimane_suund = suund
 maiuse_asukoht = [random.randrange(1, (Ekraani_K6rgus//10))* 10,
                 random.randrange(1, (Ekraani_Laius)//10) * 10]
 maiuse_spawn = True
+
+
+def Test1():
+    Testing=True
+    while Testing:
+        pass
+
+
+
+def PunktidOn():
+
+    P_font = pygame.font.SysFont('times new roman', 30)
+    p_taust = P_font.render('--------------------------|  Punktid : ' + str(Punktid)+'  |----------------------------', True, (255, 255, 255))
+    p_rect = p_taust.get_rect()
+    Ekraan.blit(p_taust, p_rect)   
 
 
 ###################################################################
@@ -53,7 +69,6 @@ while True:
             if event.key == pygame.K_RIGHT:
                 Viimane_suund = 'PAREMALE'
     
-        #Et saaks programmi x kaudu kinni panna
 
 
     #Et uss saaks kindlas suunas liikuda ja ei kirjutaks kahte suunda üle
@@ -78,6 +93,7 @@ while True:
     #Ussi kasvamine kui soob maiuse
     Ussi_keha.insert(0,list(Ussi_asukoht))
     if Ussi_asukoht[0] == maiuse_asukoht[0] and Ussi_asukoht[1] == maiuse_asukoht[1]:
+        Punktid=Punktid+10
         maiuse_spawn = False
     else:
         #Et ussi saba tuleks temaga järgi
@@ -95,19 +111,20 @@ while True:
     pygame.draw.rect(Ekraan, pygame.Color(255, 255, 255), pygame.Rect(maiuse_asukoht[0], maiuse_asukoht[1], 10, 10))
   
 
-    
+   
     #Kui uss läheb vastu seina, siis mäng lõppeb -------------------------------------------------
-    #if Ussi_asukoht[1] > 720 or Ussi_asukoht[1] < 0 or Ussi_asukoht[0] > 480 or Ussi_asukoht[0] < 0:
-    #    pygame.quit()
-
+    if Ussi_asukoht[0] < 0 or Ussi_asukoht[0] > Ekraani_K6rgus or Ussi_asukoht[1] < 0 or Ussi_asukoht[1] > Ekraani_Laius:
+        pygame.quit()
     #Kui uss läheb iseenda vastu, siis mäng lõppeb -----------------------------------------------
-
     for block in Ussi_keha[1:]:
         if Ussi_asukoht[0] == block[0] and Ussi_asukoht[1] == block[1]:
             pygame.quit()
-    
+
+    PunktidOn()
 
     # Refreshimine
     pygame.display.update()
     # Fps
     fps.tick(Ussi_kiirus)
+
+     
