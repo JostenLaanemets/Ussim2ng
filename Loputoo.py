@@ -1,16 +1,19 @@
 import pygame 
 import random
-
+import time
+#######pygame######
 pygame.init()
-
+pygame.font.init()
+#################################################################
+#Ekraani seadistus
 Ekraani_K6rgus= 720
 Ekraani_Laius= 480
 Ekraan = pygame.display.set_mode((Ekraani_K6rgus,Ekraani_Laius))
-
 pygame.display.set_caption("V6imas Ussim2ng!")
 fps=pygame.time.Clock()
 
 ##################################################################
+#ussile klassi loomine
 class Ussike:
     def __init__(self,kiirus,asukoht,keha):
         self.Ussi_kiirus=kiirus
@@ -19,41 +22,64 @@ class Ussike:
 
 
 
-
-
-
- 
-
-
-
+##################################################################
+#Punktide kuvamine ekraanile
 def Punktiseis():
+    pygame.font.init()
+    P_font = pygame.font.SysFont('times new roman', 20)
+    P_taust = P_font.render(' Punktid : ' + str(Punktid), True, (255, 255, 255))
+    P_rect = P_taust.get_rect()
+    Ekraan.blit(P_taust, P_rect)
+    
+#Mängu Lõpp
+def M2ngL2bi():
+    
+    Lopu_font = pygame.font.SysFont('times new roman', 50)
 
-    P_font = pygame.font.SysFont('Times New Roman', 30)
-    p_taust = P_font.render('--------------------------|  Punktid : ' + str(Punktid)+'  |----------------------------', True, (255, 255, 255))
-    p_rect = p_taust.get_rect()
-    Ekraan.blit(p_taust, p_rect)   
+    M2ngL2bi_Sonum = Lopu_font.render('M2ngus saavutatud punktid : ' +"["+ str(Punktid)+"]", True, (255,0,0))
+    Cheeky_Sonum = Lopu_font.render('ggwp, better luck next time!', True, (255,255,255))
 
+    M2ngL2bi_Ruut = M2ngL2bi_Sonum.get_rect()
+    Cheeky_Ruut= Cheeky_Sonum.get_rect()
+
+    Cheeky_Ruut.midtop=(360, 200)
+    M2ngL2bi_Ruut.midtop = (360, 120)
+
+    Ekraan.blit(M2ngL2bi_Sonum, M2ngL2bi_Ruut)
+    Ekraan.blit(Cheeky_Sonum,Cheeky_Ruut)
+
+    pygame.display.flip()
+
+    time.sleep(3)
+    pygame.quit()
+####################################################################
+
+
+#Ussimängu algus
 def ussim2ng():
+    
     global Punktid
     Punktid=0
-    
+    #################################################################
+
     uss = Ussike(15,[100, 50],[[100, 50],
         [90, 50],
         [80, 50],
         [70, 50]])
-    ###################################################################
+    #################################################################
 
     #Ussi algne suund
     suund = 'PAREMALE'
     Viimane_suund = suund
-    ###################################################################
-    #maius
+    #################################################################
 
+    #maius
     maiuse_asukoht = [random.randrange(1, (Ekraani_K6rgus//10))* 10,
                     random.randrange(1, (Ekraani_Laius)//10) * 10]
     maiuse_spawn = True
-###################################################################
+    #################################################################
     while True:
+        #Et saaks Mängu ristist kinni panna
         for event in pygame.event.get():
             #Et saaks ekraani panna "x" kinni
             if event.type == pygame.QUIT:
@@ -95,7 +121,9 @@ def ussim2ng():
 
         #Ussi kasvamine kui soob maiuse
         uss.Ussi_keha.insert(0,list(uss.Ussi_asukoht))
+        
         if uss.Ussi_asukoht[0] == maiuse_asukoht[0] and uss.Ussi_asukoht[1] == maiuse_asukoht[1]:
+
             Punktid=Punktid+10
             maiuse_spawn = False
         else:
@@ -111,24 +139,33 @@ def ussim2ng():
         #Ussi joonistamine
         for pos in uss.Ussi_keha:
             pygame.draw.rect(Ekraan, pygame.Color(0, 255, 0),pygame.Rect(pos[0], pos[1], 10, 10))
+        #Maiuse joonistamine
         pygame.draw.rect(Ekraan, pygame.Color(255, 255, 255), pygame.Rect(maiuse_asukoht[0], maiuse_asukoht[1], 10, 10))
     
 
     
         #Kui uss läheb vastu seina, siis mäng lõppeb -------------------------------------------------
         if uss.Ussi_asukoht[0] < 0 or uss.Ussi_asukoht[0] > Ekraani_K6rgus-10 or uss.Ussi_asukoht[1] < 0 or uss.Ussi_asukoht[1] > Ekraani_Laius-10:
-            pygame.quit()
+            M2ngL2bi()
         #Kui uss läheb iseenda vastu, siis mäng lõppeb -----------------------------------------------
         for block in uss.Ussi_keha[1:]:
             if uss.Ussi_asukoht[0] == block[0] and uss.Ussi_asukoht[1] == block[1]:
-                pygame.quit()
-
+                M2ngL2bi()
+        #Punktide kuvamine
         Punktiseis()
 
         # Refreshimine
         pygame.display.update()
         # Fps
         fps.tick(uss.Ussi_kiirus)
-ussim2ng()
 
+
+
+
+
+
+
+
+
+ussim2ng()
      
