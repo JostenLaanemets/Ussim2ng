@@ -21,6 +21,29 @@ class Ussike:
         self.Ussi_keha = keha 
 
 
+#Testib, et mäng lõppeks kui uss läheb vastu seina
+def Test2():
+
+
+    usstest = Ussike(15,[80, 10],[[80, 10],
+        [70, 10],
+        [60, 10],
+        [50, 10]])
+
+    #################################################################
+    while True:
+            
+        usstest.Ussi_asukoht[0] += 10
+        usstest.Ussi_keha.insert(0,list(usstest.Ussi_asukoht))
+
+        if usstest.Ussi_asukoht[0] < 0 or usstest.Ussi_asukoht[0] > 30 or usstest.Ussi_asukoht[1] < 0 or usstest.Ussi_asukoht[1] > 80:
+            return ("Test 2 passed") 
+        else:
+            return ("Test 2 failed")           
+                 
+print(Test2())
+
+
 
 ##################################################################
 #Punktide kuvamine ekraanile
@@ -36,7 +59,7 @@ def M2ngL2bi():
     
     Lopu_font = pygame.font.SysFont('times new roman', 50)
 
-    M2ngL2bi_Sonum = Lopu_font.render('M2ngus saavutatud punktid : ' +"["+ str(Punktid)+"]", True, (255,0,0))
+    M2ngL2bi_Sonum = Lopu_font.render('Mängus saavutatud punktid : ' +"["+ str(Punktid)+"]", True, (255,0,0))
     Cheeky_Sonum = Lopu_font.render('ggwp, better luck next time!', True, (255,255,255))
 
     M2ngL2bi_Ruut = M2ngL2bi_Sonum.get_rect()
@@ -158,13 +181,6 @@ def ussim2ng():
         pygame.display.update()
         # Fps
         fps.tick(uss.Ussi_kiirus)
-
-
-
-
-
-
-
 
 
 ussim2ng()
