@@ -4,6 +4,7 @@ import time
 #######pygame######
 pygame.init()
 pygame.font.init()
+
 #################################################################
 #Ekraani seadistus
 Ekraani_K6rgus= 720
@@ -11,8 +12,8 @@ Ekraani_Laius= 480
 Ekraan = pygame.display.set_mode((Ekraani_K6rgus,Ekraani_Laius))
 pygame.display.set_caption("V6imas Ussim2ng!")
 fps=pygame.time.Clock()
-
 ##################################################################
+
 #ussile klassi loomine
 class Ussike:
     def __init__(self,kiirus,asukoht,keha):
@@ -20,43 +21,65 @@ class Ussike:
         self.Ussi_asukoht = asukoht
         self.Ussi_keha = keha 
 
+###################################################################
+#FUNKTSIOONID######################################################
 
-#Testib, et mäng lõppeks kui uss läheb vastu seina
-def Test2():
+#USSI LIIKUMINE
+def Ussliigub(ussiklass_Asukoht,suund):
+    if suund == 'YLESSE':
+        ussiklass_Asukoht[1] -= 10
+    if suund == 'ALLA':
+        ussiklass_Asukoht[1] += 10
+    if suund == 'VASAKULE':
+        ussiklass_Asukoht[0] -= 10
+    if suund == 'PAREMALE':
+        ussiklass_Asukoht[0] += 10
 
+#Joonistab maiustuse
+def Maiusjoonista(Maiuseasukoht):
+    pygame.draw.rect(Ekraan, pygame.Color(255, 255, 255), pygame.Rect(Maiuseasukoht[0], Maiuseasukoht[1], 10, 10))  
 
-    usstest = Ussike(15,[80, 10],[[80, 10],
-        [70, 10],
-        [60, 10],
-        [50, 10]])
+#Joonistab uusi keha
+def Ussjoonista(ussiklass_keha):
+    for pos in ussiklass_keha:
+        pygame.draw.rect(Ekraan, pygame.Color(0, 255, 0),pygame.Rect(pos[0], pos[1], 10, 10))
 
-    #################################################################
-    while True:
-            
-        usstest.Ussi_asukoht[0] += 10
-        usstest.Ussi_keha.insert(0,list(usstest.Ussi_asukoht))
+#Funktsioon millega toimub ussi keha kasvamine, keha järele liikumine ja tagastab true kui sööb maiustuse ära
+def Usskasvab(ussiklass_Keha,ussiklass_Asukoht,Randomiga):
+    #Lisatakse kehale 1 suurust juurde
+    ussiklass_Keha.insert(0,list(ussiklass_Asukoht))
+    if ussiklass_Asukoht[0] == Randomiga[0] and ussiklass_Asukoht[1] == Randomiga[1]:
+        return True
+    else:
+    #Et ussi saba tuleks temaga järgi
+        ussiklass_Keha.pop()
 
-        if usstest.Ussi_asukoht[0] < 0 or usstest.Ussi_asukoht[0] > 30 or usstest.Ussi_asukoht[1] < 0 or usstest.Ussi_asukoht[1] > 80:
-            return ("Test 2 passed") 
-        else:
-            return ("Test 2 failed")           
-                 
-print(Test2())
+#Funktsioonmis määrab maiuse random asukoha
+def Maiusrandom():
+    Randomkoht = [random.randrange(1, (Ekraani_K6rgus//10))* 10,
+                    random.randrange(1, (Ekraani_Laius)//10) * 10]
+    return Randomkoht
+#Funktsioon kui uss läheb vastu seina
+def Ussvastuseina(ussiklass_Asukoht,Ekraani_X, Ekraani_Y):
+    if ussiklass_Asukoht[0] < 0 or ussiklass_Asukoht[0] > Ekraani_X-10 or ussiklass_Asukoht[1] < 0 or ussiklass_Asukoht[1] > Ekraani_Y-10:
+        return True
 
+#Funktsioon kui uss läheb vastu ennast
+def Ussvastuennast(ussiklass_Keha,ussiklass_Asukoht):
+    for block in ussiklass_Keha[1:]:
+        if ussiklass_Asukoht[0] == block[0] and ussiklass_Asukoht[1] == block[1]:
+            return True
 
-
-##################################################################
-#Punktide kuvamine ekraanile
+#Funktsioon mille abil kuvame punkte ekraanil
 def Punktiseis():
     pygame.font.init()
     P_font = pygame.font.SysFont('times new roman', 20)
     P_taust = P_font.render(' Punktid : ' + str(Punktid), True, (255, 255, 255))
     P_rect = P_taust.get_rect()
     Ekraan.blit(P_taust, P_rect)
-    
-#Mängu Lõpp
+
+#M2ng l2bi funktsioon
 def M2ngL2bi():
-    
     Lopu_font = pygame.font.SysFont('times new roman', 50)
 
     M2ngL2bi_Sonum = Lopu_font.render('Mängus saavutatud punktid : ' +"["+ str(Punktid)+"]", True, (255,0,0))
@@ -72,17 +95,71 @@ def M2ngL2bi():
     Ekraan.blit(Cheeky_Sonum,Cheeky_Ruut)
 
     pygame.display.flip()
-
     time.sleep(3)
     pygame.quit()
-####################################################################
 
 
-#Ussimängu algus
-def ussim2ng():
+
+
+##################################################################
+###Testid###
+#kui uss läheb vastu seina
+def Test1():
+    TestUss = Ussike(15,[40, 10],[[40, 10],
+        [30, 10],
+        [20, 10],
+        [10, 10]])
     
+    Ussliigub(TestUss.Ussi_asukoht, "PAREMALE")
+    if Ussvastuseina(TestUss.Ussi_asukoht,50,20)== True:
+        return "Test 1 passed"
+    else:
+        return "Test 1 failed"
+
+#Uss sööb maiuse ära ja sõidab endale sisse
+def Test2():
+    TestUss= Ussike(15,[100, 50],[[100, 50],
+        [90, 50],
+        [80, 50],
+        [70, 50]])
+
+    Toidu_Asukoht=[110,50]
+    Ussliigub(TestUss.Ussi_asukoht, "PAREMALE")
+    #uss peab sööma ära maiustuse ja ta keha kasvab
+    if Usskasvab(TestUss.Ussi_keha,TestUss.Ussi_asukoht, Toidu_Asukoht)== True:
+        #Testib, et keha muutus pikemaks
+        if len(TestUss.Ussi_keha)==5:
+            #muudab suunda kuniks uss söidab endale sisse
+            Ussliigub(TestUss.Ussi_asukoht, "YLESSE")
+            TestUss.Ussi_keha.pop()
+            Ussliigub(TestUss.Ussi_asukoht, "VASAKULE")
+            TestUss.Ussi_keha.pop()
+            Ussliigub(TestUss.Ussi_asukoht, "ALLA")
+            TestUss.Ussi_keha.pop()
+            #Kontrollib kas uss sõitis enda kehale sisse
+            if Ussvastuennast(TestUss.Ussi_keha,TestUss.Ussi_asukoht) ==True:
+                return "Test 2 passed"
+    else:
+        return "Test 2 failed"
+
+#Maiuse asukoht oleks erinev eelnevast
+def Test3():
+    Eelmine=Maiusrandom()
+    if not Maiusrandom() == Eelmine:
+        return "Test 3 passed"
+    else:
+        return "Test 3 failed"       
+  
+print(Test1())
+print(Test2())
+print(Test3())
+
+
+#Ussimängu algus####################################################
+def ussim2ng():
     global Punktid
     Punktid=0
+    
     #################################################################
 
     uss = Ussike(15,[100, 50],[[100, 50],
@@ -97,11 +174,12 @@ def ussim2ng():
     #################################################################
 
     #maius
-    maiuse_asukoht = [random.randrange(1, (Ekraani_K6rgus//10))* 10,
-                    random.randrange(1, (Ekraani_Laius)//10) * 10]
+    Rndm=Maiusrandom()
     maiuse_spawn = True
     #################################################################
+
     while True:
+
         #Et saaks Mängu ristist kinni panna
         for event in pygame.event.get():
             #Et saaks ekraani panna "x" kinni
@@ -133,46 +211,33 @@ def ussim2ng():
         if Viimane_suund == 'PAREMALE' and suund != 'VASAKULE':
             suund = 'PAREMALE'
         #Ussi suunamine 
-        if suund == 'YLESSE':
-            uss.Ussi_asukoht[1] -= 10
-        if suund == 'ALLA':
-            uss.Ussi_asukoht[1] += 10
-        if suund == 'VASAKULE':
-            uss.Ussi_asukoht[0] -= 10
-        if suund == 'PAREMALE':
-            uss.Ussi_asukoht[0] += 10
+        Ussliigub(uss.Ussi_asukoht, suund)
 
         #Ussi kasvamine kui soob maiuse
-        uss.Ussi_keha.insert(0,list(uss.Ussi_asukoht))
-        
-        if uss.Ussi_asukoht[0] == maiuse_asukoht[0] and uss.Ussi_asukoht[1] == maiuse_asukoht[1]:
-
+        if Usskasvab(uss.Ussi_keha,uss.Ussi_asukoht,Rndm)== True:
             Punktid=Punktid+10
             maiuse_spawn = False
-        else:
-            #Et ussi saba tuleks temaga järgi
-            uss.Ussi_keha.pop()
+
         #Juhul kui maiust ei ole veel
         if not maiuse_spawn:
-            maiuse_asukoht = [random.randrange(1, (Ekraani_K6rgus//10))* 10,
-                        random.randrange(1, (Ekraani_Laius)//10) * 10]
+                Rndm=Maiusrandom()
+        
         maiuse_spawn = True
 
         Ekraan.fill(pygame.Color(0, 0, 0))
-        #Ussi joonistamine
-        for pos in uss.Ussi_keha:
-            pygame.draw.rect(Ekraan, pygame.Color(0, 255, 0),pygame.Rect(pos[0], pos[1], 10, 10))
-        #Maiuse joonistamine
-        pygame.draw.rect(Ekraan, pygame.Color(255, 255, 255), pygame.Rect(maiuse_asukoht[0], maiuse_asukoht[1], 10, 10))
-    
 
+        #Ussi joonistamine
+        Ussjoonista(uss.Ussi_keha)
+
+        #Maiuse joonistamine
+        Maiusjoonista(Rndm)
     
         #Kui uss läheb vastu seina, siis mäng lõppeb -------------------------------------------------
-        if uss.Ussi_asukoht[0] < 0 or uss.Ussi_asukoht[0] > Ekraani_K6rgus-10 or uss.Ussi_asukoht[1] < 0 or uss.Ussi_asukoht[1] > Ekraani_Laius-10:
+        if Ussvastuseina(uss.Ussi_asukoht,Ekraani_K6rgus,Ekraani_Laius) == True:
             M2ngL2bi()
+
         #Kui uss läheb iseenda vastu, siis mäng lõppeb -----------------------------------------------
-        for block in uss.Ussi_keha[1:]:
-            if uss.Ussi_asukoht[0] == block[0] and uss.Ussi_asukoht[1] == block[1]:
+        if Ussvastuennast(uss.Ussi_keha,uss.Ussi_asukoht) == True:
                 M2ngL2bi()
         #Punktide kuvamine
         Punktiseis()
